@@ -20,77 +20,48 @@ jQuery(document).ready(function($) {
     $('span#nbrTour2').html(nbrTour2);
     $('span#nbrTour').html(nbrTour);
 
-
     /**  Liste des emplaçements cliquables **/
 
-    /*  Emplacement ligne 1 */
-    var l1c1 = $('td#l1c1');
-    var l1c4 = $('td#l1c4');
-    var l1c7 = $('td#l1c7');
+    /* Fonction qui vérifie pour les point a, b et c faisant partie d'une ligne, si ils sont en position de moulin */
+    function verifMoulin(a, b, c){
+        var a = $('td#'+a);
+        var b = $('td#'+b);
+        var c = $('td#'+c);
 
-    /*  Emplacement ligne 2 */
-    var l2c2 = $('td#l2c2');
-    var l2c4 = $('td#l2c4');
-    var l2c6 = $('td#l2c6');
-
-    /*  Emplacement ligne  */
-    var l3c3 = $('td#l3c3');
-    var l3c4 = $('td#l3c4');
-    var l3c5 = $('td#l3c5');
-
-    /*  Emplacement ligne  */
-    var l4c1 = $('td#l4c1');
-    var l4c2 = $('td#l4c2');
-    var l4c3 = $('td#l4c3');
-    var l4c5 = $('td#l4c5');
-    var l4c6 = $('td#l4c6');
-    var l4c7 = $('td#l4c7');
-
-    /*  Emplacement ligne  */
-    var l5c3 = $('td#l5c3');
-    var l5c4 = $('td#l5c4');
-    var l5c5 = $('td#l5c5');
+        for(var i=1; i<=2; i++){
+            if(a.hasClass("j"+i) & b.hasClass("j"+i) & c.hasClass("j"+i)){
+                console.log('Moulin joueur '+i);
+                a.addClass('moulin');
+                b.addClass('moulin');
+                c.addClass('moulin');
+            }
+            else{
+                a.removeClass('moulin');
+                b.removeClass('moulin');
+                c.removeClass('moulin');
+            }
+        }
+    }
 
 
-    /*  Emplacement ligne  */
-    var l6c2 = $('td#l6c2');
-    var l6c4 = $('td#l6c4');
-    var l6c6 = $('td#l6c6');
-
-    /*  Emplacement ligne  */
-    var l7c1 = $('td#l7c1');
-    var l7c4 = $('td#l7c4');
-    var l7c7 = $('td#l7c7');
 
     /* Gestion des pions */
 
-    /* On ajoute le pion 1 sur l'idCell en paramètre */
-    function addPion1(idCell){
-        $('#'+idCell).addClass('j1');
-        $('#'+idCell).html('<div class="pion1"></div>');
-        nbrTourJoueur1();
+    function addPion(joueur, idCell){
+        $('#'+idCell).addClass('j'+joueur);
+        $('#'+idCell).html('<div class="pion'+joueur+'"></div>');
+        nbrTourJoueur(joueur);
     }
 
-    /* On ajoute le pion 2 sur l'idCell en paramètre */
-    function addPion2(idCell){
-        $('#'+idCell).html('<div class="pion2"></div>');
-        $('#'+idCell).addClass('j2');
-        nbrTourJoueur2();
-    }
 
     // On compte combien de tour on été joué
-    function nbrTourJoueur1(){
-        var nbrTour1 = $('span#nbrTour1').html();
-        nbrTour1++
-        $('span#nbrTour1').html(nbrTour1);
+    function nbrTourJoueur(joueur){
+        var nbrTour = $('span#nbrTour'+joueur).html();
+        nbrTour++
+        $('span#nbrTour'+joueur).html(nbrTour);
     }
 
-    function nbrTourJoueur2(){
-        var nbrTour2 = $('span#nbrTour2').html();
-        nbrTour2++
-        $('span#nbrTour2').html(nbrTour2);
-    }
-
+    // On compte le tour de jeux
     function nbrTourTotal(){
         var nbrTour = $('span#nbrTour').html();
         var nbrTour1 = $('span#nbrTour1').html();
@@ -104,38 +75,47 @@ jQuery(document).ready(function($) {
 
     }
 
-    /* Fonction qui vérifie si il y a des moulins */
-
-    function moulinl1(){
-        var l1c1 = $('td#l1c1');
-        var l1c4 = $('td#l1c4');
-        var l1c7 = $('td#l1c7');
-    }
-
-
-
     /* Gestion du clic */
     $('.cliquable').click(function() {
+
+        // On récupère l'id de la cellule
         var clickCell = $(this).attr("id");
+
+        // Si la celule est déjà occupé, on le notifie
         if($('#'+clickCell).hasClass('occupe')){
             alert("Cette case est occupe !");
         }
         else{
+
+            // On récupère l'id du joueur
             var aQuiLeTour = $('span#aQuiLeTour').html();
             console.log(aQuiLeTour);
             console.log('On clique sur la cellule '+clickCell);
             switch (aQuiLeTour){
+
+                // Pour chaque joueur on...
                 case("1"):
-                    addPion1(clickCell);
+
+                    // Ajoute un de ses pions
+                    addPion(1,clickCell);
+
+                    // Incrément son nombre de tour joué
                     $('span#aQuiLeTour').html(2);
                     break;
                 case("2"):
-                    addPion2(clickCell)
+                    addPion(2, clickCell)
                     $('span#aQuiLeTour').html(1);
                     break;
             }
+
+            // On compte le nouveau total de tour
             nbrTourTotal();
+
+            // On ajoute la motion "occupe" a la case
             $('#'+clickCell).addClass('occupe');
+
+            // On vérifie si on a des moulins
+            verifMoulin('l1c1', 'l1c4', 'l1c7');
 
         }
     });
