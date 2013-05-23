@@ -11,7 +11,6 @@ jQuery(document).ready(function($) {
     /** Variables globales **/
 
     /* Nombre de tour */
-    var tour = 1
     var nbrTour = 0;
     var nbrTour1 = 0;
     var nbrTour2 = 0;
@@ -20,9 +19,13 @@ jQuery(document).ready(function($) {
     $('span#nbrTour2').html(nbrTour2);
     $('span#nbrTour').html(nbrTour);
 
-    /**  Liste des emplaçements cliquables **/
+
+
+
+
 
     /* Fonction qui vérifie pour les point a, b et c faisant partie d'une ligne, si ils sont en position de moulin */
+
     function verifMoulin(a, b, c){
         var a = $('td#'+a);
         var b = $('td#'+b);
@@ -31,6 +34,7 @@ jQuery(document).ready(function($) {
         for(var i=1; i<=2; i++){
             if(a.hasClass("j"+i) & b.hasClass("j"+i) & c.hasClass("j"+i)){
                 console.log('Moulin joueur '+i);
+                console.log(a)
                 a.addClass('moulin');
                 b.addClass('moulin');
                 c.addClass('moulin');
@@ -41,6 +45,37 @@ jQuery(document).ready(function($) {
                 c.removeClass('moulin');
             }
         }
+    }
+
+    /**  Liste des MOULINS **/
+    function moulinGlobal(){
+        var ligne  = [
+                     ['l1c1', 'l1c4', 'l1c7'],
+                     ['l2c2', 'l2c4', 'l2c6'],
+                     ['l3c3', 'l3c4', 'l3c5'],
+                     ['l4c1', 'l4c2', 'l4c3'],
+                     ['l4c5', 'l4c6', 'l4c7'],
+                     ['l5c3', 'l5c4', 'l5c6'],
+                     ['l6c2', 'l6c4', 'l6c6'],
+                     ['l7c1', 'l7c4', 'l7c7'],
+                     ['l1c1', 'l4c1', 'l7c1'],
+                     ['l2c2', 'l4c2', 'l6c2'],
+                     ['l3c3', 'l4c3', 'l5c3'],
+                     ['l1c4', 'l2c4', 'l3c4'],
+                     ['l5c4', 'l6c4', 'l7c4'],
+                     ['l3c5', 'l5c5', 'l6c5'],
+                     ['l2c6', 'l4c6', 'l7c6'],
+                     ['l1c7', 'l4c7', 'l7c7']
+                      ];
+
+        for(var i=0; i<16; i++){
+            var a = ligne[i][0];
+            var b = ligne[i][1];
+            var c = ligne[i][2];
+            verifMoulin(a,b,c);
+
+        }
+
     }
 
 
@@ -115,7 +150,7 @@ jQuery(document).ready(function($) {
             $('#'+clickCell).addClass('occupe');
 
             // On vérifie si on a des moulins
-            verifMoulin('l1c1', 'l1c4', 'l1c7');
+            moulinGlobal();
 
         }
     });
