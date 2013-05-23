@@ -69,7 +69,7 @@ jQuery(document).ready(function($) {
             ['l3c3', 'l3c4', 'l3c5'],
             ['l4c1', 'l4c2', 'l4c3'],
             ['l4c5', 'l4c6', 'l4c7'],
-            ['l5c3', 'l5c4', 'l5c6'],
+            ['l5c3', 'l5c4', 'l5c5'],
             ['l6c2', 'l6c4', 'l6c6'],
             ['l7c1', 'l7c4', 'l7c7'],
             ['l1c1', 'l4c1', 'l7c1'],
