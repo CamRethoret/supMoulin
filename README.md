@@ -3,6 +3,7 @@ supMoulin
 
 supMoulin
 
+23/05/12 : Correction bug de redondance<br/>
 23/05/13 : Gestion de la suppression de pion en cas de moulin<br/>
 23/05/13 : Validation récursivité de position du moulin<br/>
 22/05/13 : Vérification de situation du moulin<br/>

@@ -43,12 +43,16 @@ jQuery(document).ready(function($) {
 
         for(var i=1; i<=2; i++){
             if(x.hasClass("j"+i) && y.hasClass("j"+i) && z.hasClass("j"+i)){
+                if(x.hasClass('moulin') && y.hasClass('moulin') && z.hasClass('moulin')){
+
+                }else{
                 ajouterMoulin(a);
                 ajouterMoulin(b);
                 ajouterMoulin(c);
                 var joueur = $('span#aQuiLeTour').html();
                 alert('Supprimer un Pion de votre adversaire !');
                 statut('pause');
+                }
             }
             else  {
 
