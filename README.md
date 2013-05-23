@@ -3,7 +3,8 @@ supMoulin
 
 supMoulin
 
-23/05/13 : Validation RÉCURSIVE de position du moulin<br/>
+23/05/13 : Gestion de la suppression de pion en cas de moulin<br/>
+23/05/13 : Validation récursivité de position du moulin<br/>
 22/05/13 : Vérification de situation du moulin<br/>
 21/05/13 : Multi joueurs<br/>
 21/05/13 : Gestion de l'ajout de pion<br/>
