@@ -14,12 +14,14 @@ jQuery(document).ready(function($) {
     var nbrTour = 0;
     var nbrTour1 = 0;
     var nbrTour2 = 0;
+    var selection = 0;
     var etat = "marche" ;
     $('span#aQuiLeTour').html(1);
     $('span#nbrTour1').html(nbrTour1);
     $('span#nbrTour2').html(nbrTour2);
     $('span#nbrTour').html(nbrTour);
     $('span#statut').html(etat);
+    $('span#selection').html(selection);
 
     /* Fonction qui ajoute un moulin */
 
@@ -46,12 +48,12 @@ jQuery(document).ready(function($) {
                 if(x.hasClass('moulin') && y.hasClass('moulin') && z.hasClass('moulin')){
 
                 }else{
-                ajouterMoulin(a);
-                ajouterMoulin(b);
-                ajouterMoulin(c);
-                var joueur = $('span#aQuiLeTour').html();
-                alert('Supprimer un Pion de votre adversaire !');
-                statut('pause');
+                    ajouterMoulin(a);
+                    ajouterMoulin(b);
+                    ajouterMoulin(c);
+                    var joueur = $('span#aQuiLeTour').html();
+                    alert('Supprimer un Pion de votre adversaire !');
+                    statut('pause');
                 }
             }
             else  {
@@ -112,34 +114,39 @@ jQuery(document).ready(function($) {
 
     /* Supprimer un pion */
 
-    function supprimerPion(joueur, idCell){
-
-        switch (joueur){
-            case("1"):
-                var adversaire = 2;
-                break;
-            case('2'):
-                var adversaire = 1;
-                break;
+    function supprimerPion(joueur, idCell, mouvement){
+        if(mouvement==0){
+            switch (joueur){
+                case(1):
+                    var adversaire = 2;
+                    break;
+                case(2):
+                    var adversaire = 1;
+                    break;
+            }
         }
-
-        if($('#'+idCell).hasClass('moulin')){
+        else{
+            adversaire=joueur;
+        }
+        if($('#'+idCell).hasClass('moulin') || mouvement==0){
             alert('Impossible ! Ce pion est en moulin !');
         }
 
-        else if ($('td#'+idCell).hasClass('pion'+joueur)) {
+        else if ($('td#'+idCell).hasClass('pion'+joueur) || mouvement==0) {
             alert('Impossible de supprimer vos propres pions !');
         }
 
         else if($('td#'+idCell).hasClass('pion'+adversaire) || $('div#pion'+adversaire)){
+            console.log(adversaire);
             $('td#'+idCell+'> div').remove();
-            $('td#'+idCell).removeClass('occupe');
+            $('td#'+idCell).removeClass('occupe')
+            console.log(adversaire);
             $('td#'+idCell).removeClass('j'+adversaire);
             console.log('pion supprimer');
             statut('marche');
         }
         else{
-            console.log('Ya quelque chose qui a foiré');
+            console.log('ERREUR');
         }
     }
 
@@ -167,55 +174,103 @@ jQuery(document).ready(function($) {
 
 
     /* Gestion du clic */
+
     $('.cliquable').click(function() {
 
         var statut = $('span#statut').html();
         console.log(statut)
         var clickCell = $(this).attr("id")
+        var nbrTour = $('span#nbrTour').html();
+        if(nbrTour<2){
+            if(statut=="marche"){
+                if($('#'+clickCell).hasClass('occupe')){
+                    alert("Cette case est occupe !");
+                }
+                else{
 
-        if(statut=="marche"){
-            if($('#'+clickCell).hasClass('occupe')){
-                alert("Cette case est occupe !");
+                    $('#'+clickCell).addClass('occupe');
+
+                    var joueur = $('span#aQuiLeTour').html();
+
+                    switch (joueur){
+
+                        case("1"):
+                            addPion(1,clickCell);
+                            $('span#aQuiLeTour').html(2);
+                            break;
+
+                        case("2"):
+                            addPion(2, clickCell)
+                            $('span#aQuiLeTour').html(1);
+                            break;
+                    }
+
+
+                    moulinGlobal();
+                    nbrTourTotal();
+
+                }
             }
             else{
 
-                $('#'+clickCell).addClass('occupe');
+                var joueur = $('span#aQuiLeTour').html();
 
-
-                var aQuiLeTour = $('span#aQuiLeTour').html();
-
-                switch (aQuiLeTour){
-
+                switch (joueur){
                     case("1"):
-                        addPion(1,clickCell);
-                        $('span#aQuiLeTour').html(2);
+                        var adversaire = 2;
                         break;
-
-                    case("2"):
-                        addPion(2, clickCell)
-                        $('span#aQuiLeTour').html(1);
+                    case('2'):
+                        var adversaire = 1;
                         break;
                 }
-
-                moulinGlobal();
-                nbrTourTotal();
-
+                supprimerPion(adversaire, clickCell, 0);
 
             }
         }
         else{
+            console.log('Deuxième partie du jeu');
             var joueur = $('span#aQuiLeTour').html();
 
-            switch (joueur){
-                case("1"):
-                    var adversaire = 2;
-                    break;
-                case('2'):
-                    var adversaire = 1;
-                    break;
+            if( $('span#selection').html()==0){
+                if($('#'+clickCell).hasClass('occupe') && $('#'+clickCell).hasClass('j'+joueur)){
+                    console.log('Le joueur '+joueur+' a selectionne le pion '+clickCell);
+                    $('span#selection').html('1');
+                    supprimerPion(joueur, clickCell, 1);
+                }
+                else{
+                    alert('Cliquez sur un de vos pions');
+                }
             }
-            supprimerPion(adversaire, clickCell);
+            else if($('span#selection').html()==1){
+                if($('#'+clickCell).hasClass('occupe')){
+                    alert("Cette case est occupe !");
+                }
+                else{
+                    alert('On bouge le pion');
+                    $('#'+clickCell).addClass('occupe');
 
+                    var joueur = $('span#aQuiLeTour').html();
+
+                    switch (joueur){
+
+                        case("1"):
+                            addPion(1,clickCell);
+                            $('span#aQuiLeTour').html(2);
+                            break;
+
+                        case("2"):
+                            addPion(2, clickCell)
+                            $('span#aQuiLeTour').html(1);
+                            break;
+                    }
+
+
+                    $('span#selection').html('0');
+                    moulinGlobal();
+                    nbrTourTotal();
+                }
+
+            }
         }
 
     });
