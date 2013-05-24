@@ -3,7 +3,8 @@ supMoulin
 
 supMoulin
 
-24/05/10 : Gestion des déplacement<br/>
+24/05/12 : Vérification des déplacement OUI OUI \o/<br/>
+24/05/12 : Gestion des déplacement<br/>
 23/05/12 : Correction bug de redondance<br/>
 23/05/13 : Gestion de la suppression de pion en cas de moulin<br/>
 23/05/13 : Validation récursivité de position du moulin<br/>

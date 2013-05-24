@@ -64,6 +64,7 @@ jQuery(document).ready(function($) {
 
     /**  Liste des MOULINS **/
 
+
     function moulinGlobal(){
         var ligne  = [
             ['l1c1', 'l1c4', 'l1c7'],
@@ -89,6 +90,61 @@ jQuery(document).ready(function($) {
             var b = ligne[i][1];
             var c = ligne[i][2];
             verifMoulin(a,b,c);
+
+        }
+    }
+
+    /** On vérifie si le déplacement est autorisé **/
+    function deplacement(idCell, destination){
+        var deplacement = [
+            ['l1c1', 'l1c4', 'l4c1'],
+            ['l1c4', 'l1c1', 'l1c7', 'l2c4'],
+            ['l1c7', 'l1c4', 'l4c7'],
+            ['l2c2', 'l2c4', 'l4c2'],
+            ['l2c4', 'l2c2', 'l2c6', 'l3c4', 'l1c4'],
+            ['l2c6', 'l2c4', 'l4c6'],
+            ['l3c3', 'l4c3', 'l3c5'],
+            ['l3c4', 'l3c3', 'l2c4', 'l3c5'],
+            ['l3c5', 'l3c4', 'l4c5'],
+            ['l4c1', 'l4c2', 'l1c1', 'l7c1'],
+            ['l4c2', 'l4c1', 'l2c2', 'l4c3', 'l6c2'],
+            ['l4c3', 'l4c2', 'l3c3', 'l5c3'],
+            ['l4c5', 'l3c5', 'l4c6', 'l5c5'],
+            ['l4c6', 'l4c5', 'l2c6', 'l4c6', 'l6c6'],
+            ['l4c7', 'l1c7', 'l4c6', 'l7c7'],
+            ['l5c3', 'l4c3', 'l5c4'],
+            ['l5c4', 'l5c3', 'l5c5', 'l6c4'],
+            ['l5c5', 'l5c4', 'l4c5'],
+            ['l6c2', 'l4c2', 'l6c4'],
+            ['l6c4', 'l5c4', 'l6c6', 'l7c4', 'l6c2'],
+            ['l7c1', 'l7c4', 'l4c1'],
+            ['l7c4', 'l7c1', 'l6c4', 'l7c7'],
+            ['l7c7', 'l7c4', 'l4c7']
+        ];
+
+        var boucle=true
+        var verifLigne = 0
+        while(boucle){
+
+            if(verifLigne>=18){
+                boucle = false;
+                return 0;
+            }
+            else if(deplacement[verifLigne][0]==idCell){
+                boucle=false;
+            }
+            else{
+                verifLigne++
+            }
+        }
+
+        for(var i=1; i<4; i++){
+               if(deplacement[verifLigne][i]==destination){
+                   return 1;
+               }
+            else{
+                   return 0;
+               }
 
         }
     }
@@ -236,6 +292,8 @@ jQuery(document).ready(function($) {
                     console.log('Le joueur '+joueur+' a selectionne le pion '+clickCell);
                     $('span#selection').html('1');
                     supprimerPion(joueur, clickCell, 1);
+                    var enAttente = clickCell;
+                    $('span#attente').html(enAttente);
                 }
                 else{
                     alert('Cliquez sur un de vos pions');
@@ -246,7 +304,9 @@ jQuery(document).ready(function($) {
                     alert("Cette case est occupe !");
                 }
                 else{
-                    alert('On bouge le pion');
+                    $('span#selection').html('1');
+                    var enAttente = $('span#attente').html();
+                    var possible = deplacement(enAttente, clickCell);
                     $('#'+clickCell).addClass('occupe');
 
                     var joueur = $('span#aQuiLeTour').html();
