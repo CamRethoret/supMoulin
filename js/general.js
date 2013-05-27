@@ -183,12 +183,13 @@ jQuery(document).ready(function($) {
         }
         else{
             adversaire=joueur;
+
         }
-        if($('#'+idCell).hasClass('moulin') || mouvement==0){
+        if($('#'+idCell).hasClass('moulin') || mouvement==1){
             alert('Impossible ! Ce pion est en moulin !');
         }
 
-        else if ($('td#'+idCell).hasClass('pion'+joueur) || mouvement==0) {
+        else if ($('td#'+idCell).hasClass('pion'+joueur) || mouvement==1) {
             alert('Impossible de supprimer vos propres pions !');
         }
 
@@ -237,7 +238,7 @@ jQuery(document).ready(function($) {
         console.log(statut)
         var clickCell = $(this).attr("id")
         var nbrTour = $('span#nbrTour').html();
-        if(nbrTour<2){
+        if(nbrTour<9){
             if(statut=="marche"){
                 if($('#'+clickCell).hasClass('occupe')){
                     alert("Cette case est occupe !");
