@@ -3,9 +3,12 @@ supMoulin
 
 supMoulin
 
-24/05/12 : Vérification des déplacements OUI OUI \o/<br/>
-24/05/12 : Gestion des déplacement<br/>
-23/05/12 : Correction bug de redondance<br/>
+28/05/13 : L'AI détecte quand il peut faire un moulin<br/>
+28/05/13 : L'AI détecte quand l'adversaire peut faire un moulin<br/>
+28/05/13 : Commencement de la partie human vs AI. <br/>
+24/05/13 : Vérification des déplacements OUI OUI \o/<br/>
+24/05/13 : Gestion des déplacement<br/>
+23/05/13 : Correction bug de redondance<br/>
 23/05/13 : Gestion de la suppression de pion en cas de moulin<br/>
 23/05/13 : Validation récursivité de position du moulin<br/>
 22/05/13 : Vérification de situation du moulin<br/>
