@@ -53,10 +53,12 @@ jQuery(document).ready(function ($) {
                     ajouterMoulin(c);
                     var joueur = $('span#aQuiLeTour').html();
                     alert('Moulin en ' + a + ' ' + b + ' ' + c + '. Le joueur ' + joueur + ' doit supprimer un Pion de votre adversaire !');
-                    if (joueur = 1) {
+                    if (joueur === 1) {
+                        console.log('FOUDEL');
                         statut('pause');
                     }
                     else {
+                        console.log('L\'AI va supprimer un pion');
                         supprimerPionAI(joueur);
                     }
                 }
@@ -265,38 +267,20 @@ jQuery(document).ready(function ($) {
 
     }
 
-    function supprimerPionAI(joueur) {
+    function supprimerPionAI() {
         console.log('L\'AI va supprimer un pion...');
-        var ligne = [
-            ['l1c1', 'l1c4', 'l1c7'],
-            ['l2c2', 'l2c4', 'l2c6'],
-            ['l3c3', 'l3c4', 'l3c5'],
-            ['l4c1', 'l4c2', 'l4c3'],
-            ['l4c5', 'l4c6', 'l4c7'],
-            ['l5c3', 'l5c4', 'l5c5'],
-            ['l6c2', 'l6c4', 'l6c6'],
-            ['l7c1', 'l7c4', 'l7c7'],
-            ['l1c1', 'l4c1', 'l7c1'],
-            ['l2c2', 'l4c2', 'l6c2'],
-            ['l3c3', 'l4c3', 'l5c3'],
-            ['l1c4', 'l2c4', 'l3c4'],
-            ['l5c4', 'l6c4', 'l7c4'],
-            ['l3c5', 'l5c5', 'l6c5'],
-            ['l2c6', 'l4c6', 'l7c6'],
-            ['l1c7', 'l4c7', 'l7c7']
-        ];
-        for (var i = 0; i < 16; i++) {
-            var a = ligne[i][0];
-            var b = ligne[i][1];
-            var c = ligne[i][2];
-            var blocMoulin = verifSuite(1, a, b, c);
-            if (blocMoulin == a || blocMoulin == b || blocMoulin == c) {
-                console.log('L\'AI a vue que l\' humain peut faire un moulin et décide d\'ajouter un pion en ' + blocMoulin);
-                alert(a);
-                break;
+        var place = ['l1c1', 'l1c4', 'l1c7', 'l2c2', 'l2c4', 'l2c6', 'l3c3', 'l3c4', 'l3c5', 'l4c1', 'l4c2', 'l4c3', 'l4c5', 'l4c6', 'l4c7', 'l5c3', 'l5c4', 'l5c5', 'l6c2', 'l6c4', 'l6c6', 'l7c1', 'l7c4', 'l7c7'];
+        var caseOccupe = [];
+        $.each(place, function (key, place) {
+            if ($('#' + place).hasClass('j1')) {
+                caseOccupe.push(place);
             }
-
-        }
+        });
+        var caseSupp = caseOccupe[Math.floor(Math.random() * caseOccupe.length)];
+        $('td#' + caseSupp + '> div').remove();
+        $('td#' + caseSupp).removeClass('occupe');
+        $('td#' + caseSupp).removeClass('j1');
+        console.log('L\'AI décide de supprimer le pion en ' + caseSupp);
 
 
     }
@@ -305,7 +289,7 @@ jQuery(document).ready(function ($) {
         var place = ['l1c1', 'l1c4', 'l1c7', 'l2c2', 'l2c4', 'l2c6', 'l3c3', 'l3c4', 'l3c5', 'l4c1', 'l4c2', 'l4c3', 'l4c5', 'l4c6', 'l4c7', 'l5c3', 'l5c4', 'l5c5', 'l6c2', 'l6c4', 'l6c6', 'l7c1', 'l7c4', 'l7c7'];
         var caseLibre = [];
         $.each(place, function (key, place) {
-            if (!$('#'+place).hasClass('occupe')) {
+            if (!$('#' + place).hasClass('occupe')) {
                 caseLibre.push(place);
             }
         });
@@ -370,15 +354,19 @@ jQuery(document).ready(function ($) {
         if (action !== '') {
             console.log('L\'AI va ajouter un pion en ' + action);
             addPion(2, action);
+            moulinGlobal();
         }
         if (action == '') {
             console.log('L\'AI n\'a pas de moulin à bloquer.');
             console.log('L\'AI n\'a pas de moulin à faire');
             var place = placeLibre();
-            console.log('L\'AI va ajouter de manière aléatoire un pion en '+place);
+            console.log('L\'AI va ajouter de manière aléatoire un pion en ' + place);
             addPion(2, place);
+            $('#'+place).addClass('occupe');
         }
 
+        $('span#aQuiLeTour').html(1);
+        nbrTourTotal();
 
     }
 
@@ -410,6 +398,7 @@ jQuery(document).ready(function ($) {
                 supprimerPion(clickCell);
 
             }
+            $('span#aQuiLeTour').html(2);
         }
         else {
             console.log('Deuxième partie du jeu');
