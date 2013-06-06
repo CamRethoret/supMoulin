@@ -3,6 +3,7 @@ supMoulin
 
 supMoulin
 
+06/05/13 : L'AI peut placer des pions de manière aléatoire<br/>
 28/05/13 : L'AI détecte quand il peut faire un moulin<br/>
 28/05/13 : L'AI détecte quand l'adversaire peut faire un moulin<br/>
 28/05/13 : Commencement de la partie human vs AI. <br/>

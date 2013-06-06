@@ -52,8 +52,13 @@ jQuery(document).ready(function ($) {
                     ajouterMoulin(b);
                     ajouterMoulin(c);
                     var joueur = $('span#aQuiLeTour').html();
-                    alert('Le joueur '+joueur+' doit supprimer un Pion de votre adversaire !');
-                    statut('pause');
+                    alert('Moulin en ' + a + ' ' + b + ' ' + c + '. Le joueur ' + joueur + ' doit supprimer un Pion de votre adversaire !');
+                    if (joueur = 1) {
+                        statut('pause');
+                    }
+                    else {
+                        supprimerPionAI(joueur);
+                    }
                 }
             }
             else {
@@ -292,6 +297,20 @@ jQuery(document).ready(function ($) {
             }
 
         }
+
+
+    }
+
+    function placeLibre() {
+        var place = ['l1c1', 'l1c4', 'l1c7', 'l2c2', 'l2c4', 'l2c6', 'l3c3', 'l3c4', 'l3c5', 'l4c1', 'l4c2', 'l4c3', 'l4c5', 'l4c6', 'l4c7', 'l5c3', 'l5c4', 'l5c5', 'l6c2', 'l6c4', 'l6c6', 'l7c1', 'l7c4', 'l7c7'];
+        var caseLibre = [];
+        $.each(place, function (key, place) {
+            if (!$('#'+place).hasClass('occupe')) {
+                caseLibre.push(place);
+            }
+        });
+
+        return caseLibre[Math.floor(Math.random() * caseLibre.length)];
     }
 
 
@@ -315,33 +334,51 @@ jQuery(document).ready(function ($) {
             ['l2c6', 'l4c6', 'l7c6'],
             ['l1c7', 'l4c7', 'l7c7']
         ];
-
-        for (var i = 0; i < 16; i++) {
-            var a = ligne[i][0];
-            var b = ligne[i][1];
-            var c = ligne[i][2];
-            var blocMoulin = verifSuite(1, a, b, c);
-            if (blocMoulin == a || blocMoulin == b || blocMoulin == c) {
-                console.log('L\'AI a vue que l\' humain peut faire un moulin et décide d\'ajouter un pion en ' + blocMoulin);
-                addPion(2, blocMoulin);
-                break;
-            }
-            else {
-                console.log('Pas de moulin à bloquer');
-                var blocMoulin = verifSuite(2, a, b, c);
+        var boucle = true
+        var verifLigne = 0
+        var action = '';
+        while (boucle) {
+            if (verifLigne > 15) {
+                boucle = false;
+            } else {
+                var a = ligne[verifLigne][0];
+                var b = ligne[verifLigne][1];
+                var c = ligne[verifLigne][2];
+                var blocMoulin = verifSuite(1, a, b, c);
                 if (blocMoulin == a || blocMoulin == b || blocMoulin == c) {
-                    console.log('L\'AI a vue le moulin possible et décide  d\'ajouter un pion en ' + blocMoulin);
-                    addPion(2, blocMoulin);
-                    supprimerPionAI(1);
-                    break;
+                    console.log('L\'AI a vue que l\' humain peut faire un moulin et décide d\'ajouter un pion en ' + blocMoulin);
+                    action = blocMoulin
+                    boucle = false;
                 }
                 else {
-                    console.log('L\'AI n\'a pas de moulin à faire');
+
+                    var blocMoulin = verifSuite(2, a, b, c);
+                    if (blocMoulin == a || blocMoulin == b || blocMoulin == c) {
+                        console.log('L\'AI a vue le moulin possible et décide  d\'ajouter un pion en ' + blocMoulin);
+                        action = blocMoulin
+                        boucle = false;
+                    }
+                    else {
+                        console.log('Rien a faire on passe à la ligne suivante');
+                        verifLigne++;
+                    }
 
                 }
             }
-
         }
+        console.log(action);
+        if (action !== '') {
+            console.log('L\'AI va ajouter un pion en ' + action);
+            addPion(2, action);
+        }
+        if (action == '') {
+            console.log('L\'AI n\'a pas de moulin à bloquer.');
+            console.log('L\'AI n\'a pas de moulin à faire');
+            var place = placeLibre();
+            console.log('L\'AI va ajouter de manière aléatoire un pion en '+place);
+            addPion(2, place);
+        }
+
 
     }
 
@@ -417,4 +454,5 @@ jQuery(document).ready(function ($) {
     });
 
 
-});
+})
+;
