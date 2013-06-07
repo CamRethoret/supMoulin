@@ -139,7 +139,6 @@ jQuery(document).ready(function ($) {
             var b = ligne[i][1];
             var c = ligne[i][2];
             verifMoulin(a, b, c);
-
         }
     }
 
@@ -216,8 +215,6 @@ jQuery(document).ready(function ($) {
                 console.log('Lé déplacement est validé.');
                 return 1;
             }
-
-
         }
     }
 
@@ -348,7 +345,6 @@ jQuery(document).ready(function ($) {
             return a;
         }
         else return null
-
     }
 
     /* Fonction permettant à l'AI de supprimer un pion. */
@@ -441,7 +437,6 @@ jQuery(document).ready(function ($) {
                         console.log('Rien a faire on passe à la ligne suivante');
                         verifLigne++;
                     }
-
                 }
             }
         }
@@ -460,6 +455,8 @@ jQuery(document).ready(function ($) {
         if (action == '') {
             console.log('L\'AI n\'a pas de moulin à bloquer.');
             console.log('L\'AI n\'a pas de moulin à faire');
+
+            // On vérifie si la place est libre.
             var place = placeLibre();
             console.log('L\'AI va ajouter de manière aléatoire un pion en ' + place);
             addPion(2, place);
@@ -468,7 +465,6 @@ jQuery(document).ready(function ($) {
 
         $('span#aQuiLeTour').html(1);
         nbrTourTotal();
-
     }
 
     /* Fonction qui gère le deuxième tour de l'AI */
@@ -476,11 +472,78 @@ jQuery(document).ready(function ($) {
         console.log('L\'AI va devoir déplacer un pion.');
 
         /*  Array stockant les pions de l'AI */
-        var caseOccupe = [];
+        var listePions = [];
 
         /* L'AI check la position de ses pions sur la PokéMap. */
-        $('.j2').each(function (nbrPion) {
-            caseOccupe.push($(this).attr("id"));
+        $('.j2').each(function (index) {
+            listePions.push($(this).attr("id"));
+        });
+
+        // On récupère toutes les lignes.
+        var ligne = [
+            ['l1c1', 'l1c4', 'l1c7'],
+            ['l2c2', 'l2c4', 'l2c6'],
+            ['l3c3', 'l3c4', 'l3c5'],
+            ['l4c1', 'l4c2', 'l4c3'],
+            ['l4c5', 'l4c6', 'l4c7'],
+            ['l5c3', 'l5c4', 'l5c5'],
+            ['l6c2', 'l6c4', 'l6c6'],
+            ['l7c1', 'l7c4', 'l7c7'],
+            ['l1c1', 'l4c1', 'l7c1'],
+            ['l2c2', 'l4c2', 'l6c2'],
+            ['l3c3', 'l4c3', 'l3c4'],
+            ['l1c4', 'l2c4', 'l3c4'],
+            ['l5c4', 'l6c4', 'l7c4'],
+            ['l3c5', 'l5c5', 'l6c5'],
+            ['l2c6', 'l4c6', 'l7c6'],
+            ['l1c7', 'l4c7', 'l7c7']
+        ];
+        var boucle = true
+        var verifLigne = 0
+        var action = '';
+
+        // Pour chaque ligne, on vérifie les actions qui peuvent être effectuées.
+        while (boucle) {
+            if (verifLigne > 15) {
+                boucle = false;
+            } else {
+                var a = ligne[verifLigne][0];
+                var b = ligne[verifLigne][1];
+                var c = ligne[verifLigne][2];
+
+                // On vérifie si on peut bloquer un moulin humain.
+                var blocMoulin = verifSuite(1, a, b, c);
+                if (blocMoulin == a || blocMoulin == b || blocMoulin == c) {
+                    console.log('L\'AI a vue que l\' humain peut faire un moulin en ' + blocMoulin);
+                    action = blocMoulin
+                    boucle = false;
+                }
+                else {
+
+                    // On vérifie si l'AI peut faire un moulin.
+                    var blocMoulin = verifSuite(2, a, b, c);
+                    if (blocMoulin == a || blocMoulin == b || blocMoulin == c) {
+                        console.log('L\'AI a vue le moulin possible en ' + blocMoulin);
+                        action = blocMoulin
+                        boucle = false;
+                    }
+                    else {
+                        console.log('Rien a faire on passe à la ligne suivante');
+                        verifLigne++;
+                    }
+                }
+            }
+        }
+
+
+        // Pour tous les pions, on vérifie les mouvements possibles
+        $.each(listePions, function (key, place) {
+            var possible = deplacement(place, action);
+            if(possible===1){
+                supprimerPion(place);
+                addPion(2, action);
+                return;
+            }
         });
     }
 
@@ -580,7 +643,7 @@ jQuery(document).ready(function ($) {
                         console.log('Pion en attente de placement : ' + enAttente);
                         console.log('Case destinataire : ' + clickCell);
 
-                       // On vérifie si le déplacement est possible
+                        // On vérifie si le déplacement est possible
                         var possible = deplacement(enAttente, clickCell);
 
                         // Si c'est possible
@@ -608,9 +671,7 @@ jQuery(document).ready(function ($) {
                         else {
                             alert("ERREUR !");
                         }
-
                     }
-
                 }
             } else {
                 // Si le jeu est sur pause, on supprime un pion.

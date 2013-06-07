@@ -3,6 +3,8 @@ supMoulin
 
 supMoulin
 
+07/06/13 : L'AI peut faire des moulins dans la deuxième partie du jeu <br/>
+07/06/13 : L'AI peut bloquer des moulins dans la deuxième partie du jeu<br/>
 07/06/13 : Explication de l'algorithme.<br/>
 07/06/13 : Correction bug supprimer pion par l'AI<br/>
 07/06/13 : Correction bug addPion AI<br/>
