@@ -3,6 +3,10 @@ supMoulin
 
 supMoulin
 
+07/06/13 : Explication de l'algorithme.<br/>
+07/06/13 : Correction bug supprimer pion par l'AI<br/>
+07/06/13 : Correction bug addPion AI<br/>
+07/06/13 : Correction bug déplacement<br/>
 06/05/13 : L'AI peut supprimer des pions quand elle fait un moulin<br/>
 06/05/13 : L'AI peut placer des pions de manière aléatoire<br/>
 28/05/13 : L'AI détecte quand il peut faire un moulin<br/>
