@@ -404,6 +404,8 @@ jQuery(document).ready(function ($) {
             ['l2c6', 'l4c6', 'l7c6'],
             ['l1c7', 'l4c7', 'l7c7']
         ];
+
+
         var boucle = true
         var verifLigne = 0
         var action = '';
@@ -515,7 +517,8 @@ jQuery(document).ready(function ($) {
                 var blocMoulin = verifSuite(1, a, b, c);
                 if (blocMoulin == a || blocMoulin == b || blocMoulin == c) {
                     console.log('L\'AI a vue que l\' humain peut faire un moulin en ' + blocMoulin);
-                    action = blocMoulin
+                    action = blocMoulin;
+                    var suitePossible = action;
                     boucle = false;
                 }
                 else {
@@ -534,8 +537,6 @@ jQuery(document).ready(function ($) {
                 }
             }
         }
-
-
         // Pour tous les pions, on vérifie les mouvements possibles
         $.each(listePions, function (key, place) {
             var possible = deplacement(place, action);
@@ -545,6 +546,12 @@ jQuery(document).ready(function ($) {
                 return;
             }
         });
+
+        // Maintenant que l'AI a vérifié si il pouvait bloquer des moulins ou en faire en se déplaçant,
+        // l'AI va regarder si il a une suite et comment approcher un de ses pions plus près.
+
+        console.log('L\'AI a une suite possible en '+suitePossible);
+
     }
 
 
@@ -564,7 +571,7 @@ jQuery(document).ready(function ($) {
         var nbrTour = $('span#nbrTour').html();
 
         // Si on est avant le tour 9, on est sur la première partie du jeu.
-        if (nbrTour < 3) {
+        if (nbrTour < 9) {
 
             // SI le statut est en marche.
             if (statut == "marche") {
@@ -605,6 +612,7 @@ jQuery(document).ready(function ($) {
 
             // Si le jeu est en mode "marche"
             if (statut == "marche") {
+
 
                 // Si aucun pion n'est sélectioné.
                 if ($('span#selection').html() == 0) {
