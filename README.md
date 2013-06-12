@@ -2,7 +2,7 @@ supMoulin
 =========
 
 supMoulin
-
+12/06/13 : Déplacement aléatoire AI<br/>
 12/06/13 : Affichage et gestion du nombre de pion<br/>
 12/06/13 : Debug moulin global AI<br/>
 12/06/13 : Gestion de l'état du jeu<br/>

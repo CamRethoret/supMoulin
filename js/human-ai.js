@@ -267,7 +267,7 @@ jQuery(document).ready(function ($) {
 
         // On regarde si le déplacement est possible (sans prendre en compte si la case est occupée)
         for (var i = 1; i < nbrDeplacement; i++) {
-            if (deplacement[verifLigne][i] == destination) {
+            if (deplacement[verifLigne][i] == destination && !$('#' + destination).hasClass('occupe')) {
                 console.log('Lé déplacement est validé.');
                 return 1;
             }
@@ -556,6 +556,34 @@ jQuery(document).ready(function ($) {
             ['l2c6', 'l4c6', 'l6c6'],
             ['l1c7', 'l4c7', 'l7c7']
         ];
+
+        // On récupère tous les déplacements
+        var listeDeplacement = [
+            ['l1c1', 'l1c4', 'l4c1'],
+            ['l1c4', 'l1c1', 'l1c7', 'l2c4'],
+            ['l1c7', 'l1c4', 'l4c7'],
+            ['l2c2', 'l2c4', 'l4c2'],
+            ['l2c4', 'l2c2', 'l2c6', 'l3c4', 'l1c4'],
+            ['l2c6', 'l2c4', 'l4c6'],
+            ['l3c3', 'l4c3', 'l3c5'],
+            ['l3c4', 'l3c3', 'l2c4', 'l3c5'],
+            ['l3c5', 'l3c4', 'l4c5'],
+            ['l4c1', 'l4c2', 'l1c1', 'l7c1'],
+            ['l4c2', 'l4c1', 'l2c2', 'l4c3', 'l6c2'],
+            ['l4c3', 'l4c2', 'l3c3', 'l5c3'],
+            ['l4c5', 'l3c5', 'l4c6', 'l5c5'],
+            ['l4c6', 'l4c5', 'l2c6', 'l4c7', 'l6c6'],
+            ['l4c7', 'l1c7', 'l4c6', 'l7c7'],
+            ['l5c3', 'l4c3', 'l5c4'],
+            ['l5c4', 'l5c3', 'l5c5', 'l6c4'],
+            ['l5c5', 'l5c4', 'l4c5'],
+            ['l6c2', 'l4c2', 'l6c4'],
+            ['l6c4', 'l5c4', 'l6c6', 'l7c4', 'l6c2'],
+            ['l6c6', 'l6c4', 'l4c6'],
+            ['l7c1', 'l7c4', 'l4c1'],
+            ['l7c4', 'l7c1', 'l6c4', 'l7c7'],
+            ['l7c7', 'l7c4', 'l4c7']
+        ];
         var boucle = true
         var verifLigne = 0
         var action = '';
@@ -603,12 +631,68 @@ jQuery(document).ready(function ($) {
                 addPion(2, action);
                 return;
             }
+            else {
+                // Déplacement aléatoire
+                // On va stocker tous les déplacements possibles.
+                var deplacementAleatoire = [];
+                var boucle = true
+
+                console.log('L\'AI va placer aléatoirement');
+
+                $.each(listePions, function (key, place) {
+                    if ($('#' + place).hasClass('j2')) {
+
+                        console.log('L\'AI regarde les déplacements du pion '+place);
+                        // On instancie la boucle à true.
+
+
+                        // On commence à vérifier la ligne 0.
+                        var verifLigne = 0
+
+                        // Tant que la boucle est vrai...
+                        while (boucle) {
+
+                            // On limite le nombre de boucle à 23. (En commençant par 0).
+                            if (verifLigne > 23) {
+
+                                // On arrête la boucle.
+                                boucle = false;
+
+                                // On retourne 0 (pour dire pas de déplacement).
+                                return 0;
+                            }
+                            // Si on trouve la case de départ dans le tableau...
+                            else if (listeDeplacement[verifLigne][0] == place) {
+
+                                console.log('L\'AI regardes s\'occupe donc du pion '+listeDeplacement[verifLigne][0]);
+
+                                var nbrDeplacement = listeDeplacement[verifLigne].length;
+                                // On vérifie les déplacements possible
+                                for (var i = 1; i < nbrDeplacement; i++) {
+                                    if (!$('#' + listeDeplacement[verifLigne][i]).hasClass('occupe')) {
+
+                                        // On ajoute dans le tableau les déplacements possibles
+                                        deplacementAleatoire.push([place, listeDeplacement[verifLigne][i]]);
+                                        verifLigne++
+                                    }
+                                }
+                            }
+                            else {
+                                // Sinon on passe à la ligne suivante.
+
+                                verifLigne++
+                            }
+                        }
+
+                    }
+                });
+                var datDeplacement = [];
+                datDeplacement =  deplacementAleatoire[Math.floor(Math.random() * deplacementAleatoire.length)];
+                console.log('On va déplacer de '+datDeplacement[0]+' à '+datDeplacement[1]);
+
+            }
         });
 
-        // Maintenant que l'AI a vérifié si il pouvait bloquer des moulins ou en faire en se déplaçant,
-        // l'AI va regarder si il a une suite et comment approcher un de ses pions plus près.
-
-        console.log('L\'AI a une suite possible en ' + suitePossible);
 
     }
 
@@ -650,7 +734,7 @@ jQuery(document).ready(function ($) {
                     // On change le nombre de tour.
                     nbrTourTotal();
 
-                    if($('span#statut').html()=="marche"){
+                    if ($('span#statut').html() == "marche") {
                         // On permet à l'AI de jouer son tour.
                         actionAIPremier();
                     }
@@ -731,7 +815,7 @@ jQuery(document).ready(function ($) {
                             // On vérifie le nombre de tour.
                             nbrTourTotal();
 
-                            if($('span#statut').html()=="marche"){
+                            if ($('span#statut').html() == "marche") {
                                 // On demande à l'AI de jouer
                                 actionAIDeuxieme();
                             }
