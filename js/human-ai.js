@@ -22,6 +22,7 @@ jQuery(document).ready(function ($) {
     /* Pion selectionné */
     var selection = 0;
 
+
     /* Etat du jeu */
     var etat = "marche";
 
@@ -43,6 +44,61 @@ jQuery(document).ready(function ($) {
     /* On instancie visuelement le pion sélectionné */
     $('span#selection').html(selection);
 
+    /* On instancie le nombre de pion du joueur 1 */
+    $('span#nbrPion1').html(0);
+
+    /* On instancie le nombre de pion du joueur 2 */
+    $('span#nbrPion2').html(0);
+
+
+    /** Gestion des statuts de la partie **/
+
+    /* Fonction qui termine le jeu si plus de 50 coups joués */
+
+    function finPartie() {
+
+        // On récupère le nombre de tour
+        var nbrTour = $('span#nbrTour').html();
+        console.log(nbrTour);
+
+        // SI 50 tours joués, alors match nul
+        if (nbrTour > 50) {
+            alert('Match nul : La partie est terminée !');
+        }
+    }
+
+    /* Fonction qui vérifie si un joueur a gagné (si un joueur à moins de 3 pion après le 9ème tour */
+
+    function joueurGagnant() {
+
+        // On récupère les emplaçements où il peut y 'avoir des pions
+        var place = ['l1c1', 'l1c4', 'l1c7', 'l2c2', 'l2c4', 'l2c6', 'l3c3', 'l3c4', 'l3c5', 'l4c1', 'l4c2', 'l4c3', 'l4c5', 'l4c6', 'l4c7', 'l5c3', 'l5c4', 'l5c5', 'l6c2', 'l6c4', 'l6c6', 'l7c1', 'l7c4', 'l7c7'];
+        var nbrPion1 = 0;
+        var nbrPion2 = 0;
+        var nbrTour = $('span#nbrTour').html();
+
+        // On compte le nombre de pion pour chaque joueur
+        $.each(place, function (key, place) {
+            if ($('#' + place).hasClass('j1')) {
+                nbrPion1++;
+            }
+            else if ($('#' + place).hasClass('j2')) {
+                nbrPion2++;
+            }
+        });
+
+        // On affiche le nombre de pion pour chaque joueur
+        $('span#nbrPion1').html(nbrPion1);
+        $('span#nbrPion2').html(nbrPion2);
+
+        if (nbrTour > 9 && nbrPion1 < 3) {
+            alert('Le joueur 1 a perdu');
+        }
+        else if (nbrTour > 9 && nbrPion2 < 3) {
+            alert('Le joueur 2 a perdu');
+        }
+
+    }
 
     /** Gestion des moulins **/
 
@@ -129,7 +185,7 @@ jQuery(document).ready(function ($) {
             ['l1c4', 'l2c4', 'l3c4'],
             ['l5c4', 'l6c4', 'l7c4'],
             ['l3c5', 'l5c5', 'l4c5'],
-            ['l2c6', 'l4c6', 'l7c6'],
+            ['l2c6', 'l4c6', 'l6c6'],
             ['l1c7', 'l4c7', 'l7c7']
         ];
 
@@ -401,7 +457,7 @@ jQuery(document).ready(function ($) {
             ['l1c4', 'l2c4', 'l3c4'],
             ['l5c4', 'l6c4', 'l7c4'],
             ['l3c5', 'l5c5', 'l6c5'],
-            ['l2c6', 'l4c6', 'l7c6'],
+            ['l2c6', 'l4c6', 'l6c6'],
             ['l1c7', 'l4c7', 'l7c7']
         ];
 
@@ -497,7 +553,7 @@ jQuery(document).ready(function ($) {
             ['l1c4', 'l2c4', 'l3c4'],
             ['l5c4', 'l6c4', 'l7c4'],
             ['l3c5', 'l5c5', 'l6c5'],
-            ['l2c6', 'l4c6', 'l7c6'],
+            ['l2c6', 'l4c6', 'l6c6'],
             ['l1c7', 'l4c7', 'l7c7']
         ];
         var boucle = true
@@ -540,8 +596,10 @@ jQuery(document).ready(function ($) {
         // Pour tous les pions, on vérifie les mouvements possibles
         $.each(listePions, function (key, place) {
             var possible = deplacement(place, action);
-            if(possible===1){
-                supprimerPion(place);
+            if (possible === 1) {
+                $('td#' + place + '> div').remove();
+                $('td#' + place).removeClass('occupe');
+                $('td#' + place).removeClass('j2');
                 addPion(2, action);
                 return;
             }
@@ -550,7 +608,7 @@ jQuery(document).ready(function ($) {
         // Maintenant que l'AI a vérifié si il pouvait bloquer des moulins ou en faire en se déplaçant,
         // l'AI va regarder si il a une suite et comment approcher un de ses pions plus près.
 
-        console.log('L\'AI a une suite possible en '+suitePossible);
+        console.log('L\'AI a une suite possible en ' + suitePossible);
 
     }
 
@@ -592,8 +650,11 @@ jQuery(document).ready(function ($) {
                     // On change le nombre de tour.
                     nbrTourTotal();
 
-                    // On permet à l'AI de jouer son tour.
-                    actionAIPremier();
+                    if($('span#statut').html()=="marche"){
+                        // On permet à l'AI de jouer son tour.
+                        actionAIPremier();
+                    }
+
                 }
             }
             else {
@@ -670,11 +731,14 @@ jQuery(document).ready(function ($) {
                             // On vérifie le nombre de tour.
                             nbrTourTotal();
 
+                            if($('span#statut').html()=="marche"){
+                                // On demande à l'AI de jouer
+                                actionAIDeuxieme();
+                            }
+
+
                             // On repasse le jeu en mode "marche"
                             $('span#statut').html('marche');
-
-                            // On demande à l'AI de jouer
-                            actionAIDeuxieme();
                         }
                         else {
                             alert("ERREUR !");
@@ -686,5 +750,7 @@ jQuery(document).ready(function ($) {
                 supprimerPion(clickCell);
             }
         }
+        joueurGagnant();
+        finPartie();
     });
 });

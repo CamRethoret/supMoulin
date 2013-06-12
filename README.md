@@ -3,6 +3,9 @@ supMoulin
 
 supMoulin
 
+12/06/13 : Affichage et gestion du nombre de pion<br/>
+12/06/13 : Debug moulin global AI<br/>
+12/06/13 : Gestion de l'état du jeu<br/>
 07/06/13 : L'AI peut faire des moulins dans la deuxième partie du jeu <br/>
 07/06/13 : L'AI peut bloquer des moulins dans la deuxième partie du jeu<br/>
 07/06/13 : Explication de l'algorithme.<br/>
