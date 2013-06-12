@@ -2,6 +2,7 @@ supMoulin
 =========
 
 supMoulin
+12/06/13 : Implémentation de l'AI offensive<br/>
 12/06/13 : Déplacement aléatoire AI<br/>
 12/06/13 : Affichage et gestion du nombre de pion<br/>
 12/06/13 : Debug moulin global AI<br/>
